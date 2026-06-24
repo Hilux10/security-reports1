@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>דוח עיכוב לאיש ביטחון</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{direction:rtl;font-family:'Times New Roman',David,serif;background:#d4d4d4;}
+.bar{position:fixed;top:0;left:0;right:0;z-index:300;background:#1B2A4A;padding:10px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.4);}
+.bar-info{flex:1;}
+.bar-title{font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.bar-sub{font-family:Arial,sans-serif;font-size:10px;color:rgba(255,255,255,.7);}
+.bar-btn{border:none;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;}
+.btn-p{background:#E2A200;color:#fff;}
+.btn-e{background:#16A34A;color:#fff;}
+.page{padding:68px 8px 50px;}
+.doc{background:#fff;max-width:760px;margin:0 auto;padding:10mm 13mm;box-shadow:0 4px 20px rgba(0,0,0,.18);font-size:10.5pt;line-height:1.65;}
+.logo-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.logo-name{font-size:13pt;font-weight:bold;color:#003399;}
+.logo-en{font-size:7.5pt;color:#003399;}
+.tracks{margin-top:3px;}
+.tracks span{display:block;background:#003399;border-radius:1px;margin-bottom:2px;}
+.dept-row{display:flex;justify-content:space-between;font-size:9pt;color:#003399;font-weight:bold;margin-bottom:1px;}
+.upd{font-size:8pt;color:#555;margin-bottom:4px;}
+.doc-hr{border:none;border-top:1.5px solid #000;margin:4px 0 8px;}
+.doc-title{text-align:center;font-size:15pt;font-weight:bold;text-decoration:underline;margin:4px 0 14px;}
+.sec{font-weight:bold;font-size:10.5pt;margin-bottom:5px;}
+.tbl{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10pt;}
+.tbl th{border:1px solid #000;padding:4px 6px;background:#f0f0f0;text-align:center;font-weight:bold;}
+.tbl td{border:1px solid #000;padding:0;height:26px;}
+.tcell{width:100%;height:26px;display:block;border:none;outline:none;text-align:center;background:transparent;font-family:'Times New Roman',serif;font-size:10pt;direction:rtl;cursor:pointer;padding:2px 4px;line-height:22px;}
+.tcell:hover{background:#fffce8;}
+.tcell.ph-val{color:#bbb;}
+.irow{display:flex;align-items:flex-end;gap:4px;margin-bottom:7px;flex-wrap:wrap;}
+.ilbl{font-weight:bold;white-space:nowrap;font-size:10.5pt;}
+.iff{border:none;border-bottom:1px solid #000;outline:none;background:transparent;font-family:'Times New Roman',serif;font-size:10.5pt;direction:rtl;padding:0 3px;cursor:pointer;min-height:20px;line-height:20px;display:inline-block;vertical-align:bottom;}
+.iff:hover{background:#fffce8;}
+.iff.sm{width:70px;}.iff.md{width:125px;}.iff.lg{flex:1;min-width:90px;}
+.iff.ph-val{color:#bbb;}
+.sub{font-size:8.5pt;color:#555;margin-top:-4px;margin-bottom:8px;}
+.lf{display:block;width:100%;border:none;border-bottom:1px solid #000;outline:none;background:transparent;font-family:'Times New Roman',serif;font-size:10.5pt;direction:rtl;padding:1px 3px;cursor:pointer;min-height:22px;line-height:22px;margin-bottom:5px;}
+.lf:hover{background:#fffce8;}
+.lf.ph-val{color:#bbb;}
+.cblist{margin:3px 0 6px;}
+.cbrow{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:10.5pt;cursor:pointer;user-select:none;}
+.cbbox{width:13px;height:13px;border:1.5px solid #000;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;background:#fff;}
+.sig{margin:12px 0 10px;font-size:10.5pt;}
+.sig-line{display:inline-block;border-bottom:1px solid #000;width:190px;height:20px;margin-right:6px;vertical-align:bottom;}
+.docftr{border-top:1px solid #ccc;padding-top:7px;font-size:10pt;margin-top:14px;}
+.inv{background:#FEF2F2!important;border-bottom-color:#EF4444!important;}
+.inv-t{background:#FEF2F2!important;}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.sheet{background:#fff;width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px 20px 36px;font-family:Arial,sans-serif;direction:rtl;}
+.sheet-lbl{font-size:15px;font-weight:700;color:#1B2A4A;margin-bottom:12px;}
+.sheet-inp{width:100%;border:1.5px solid #CBD5E1;border-radius:10px;padding:12px 14px;font-size:16px;font-family:Arial,sans-serif;direction:rtl;outline:none;background:#F8FAFC;}
+.sheet-inp:focus{border-color:#1B2A4A;background:#fff;}
+.sheet-btns{display:flex;gap:10px;margin-top:14px;}
+.sheet-ok{flex:1;background:#1B2A4A;color:#fff;border:none;padding:13px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;}
+.sheet-cancel{background:#F1F5F9;color:#334155;border:none;padding:13px 20px;border-radius:10px;font-size:14px;cursor:pointer;font-family:Arial,sans-serif;}
+.succ{display:none;position:fixed;inset:0;background:#fff;z-index:600;flex-direction:column;align-items:center;justify-content:center;font-family:Arial,sans-serif;text-align:center;padding:30px;}
+.succ.open{display:flex;}
+.succ-icon{font-size:64px;margin-bottom:20px;}
+.succ-title{font-size:22px;font-weight:700;color:#1B2A4A;margin-bottom:10px;}
+.succ-sub{font-size:15px;color:#475569;margin-bottom:28px;line-height:1.6;}
+.succ-back{background:#1B2A4A;color:#fff;border:none;padding:13px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;}
+@media print{
+  .bar,.overlay,.succ{display:none!important;}
+  body{background:#fff;}
+  .page{padding:0;}
+  .doc{box-shadow:none;max-width:100%;padding:8mm 12mm;}
+  .ph-val{color:#000!important;}
+}
+</style>
+</head>
+<body>
+
+<!-- ACTION BAR -->
+<div class="bar">
+  <div class="bar-info">
+    <div class="bar-title">דו"ח עיכוב לאיש ביטחון</div>
+    <div class="bar-sub">לחץ על כל שדה למילוי</div>
+  </div>
+  <button class="bar-btn btn-p" onclick="printDoc()">🖨️ הדפס</button>
+  <button class="bar-btn btn-e" onclick="sendEmail()">שלח מייל ✓</button>
+</div>
+
+<div class="page">
+<div class="doc" id="doc">
+
+  <!-- לוגואים -->
+  <div class="logo-row">
+    <div>
+      <div class="logo-name">רכבת ישראל</div>
+      <div class="logo-en">Israel Railways</div>
+      <div class="tracks">
+        <span style="height:3px;width:90px;"></span>
+        <span style="height:2px;width:70px;"></span>
+        <span style="height:1.5px;width:55px;"></span>
+      </div>
+    </div>
+    <svg viewBox="0 0 60 60" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+      <path d="M30,3 L54,13 L54,32 C54,44 30,56 30,56 C30,56 6,44 6,32 L6,13 Z" fill="none" stroke="#003399" stroke-width="2"/>
+      <path d="M30,9 L48,17 L48,32 C48,41 30,51 30,51 C30,51 12,41 12,32 L12,17 Z" fill="#e8eef8"/>
+      <text x="30" y="37" text-anchor="middle" font-family="Arial" font-size="18" font-weight="bold" fill="#003399">ב</text>
+    </svg>
+  </div>
+
+  <div class="dept-row"><div>אגף בטחון</div><div>מחלקת אבטחה פיזית</div></div>
+  <div class="upd">עודכן בתאריך 21/3/2018</div>
+  <hr class="doc-hr">
+  <div class="doc-title">דו"ח עיכוב לאיש ביטחון</div>
+
+  <!-- פרטי ממלא -->
+  <div class="sec">פרטי ממלא הדו"ח:</div>
+  <table class="tbl">
+    <thead>
+      <tr><th>ת.ז.</th><th>תפקיד</th><th>שם פרטי</th><th>שם משפחה</th><th>מס' תעודת מאבטח</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tcell ph-val" id="id" onclick="openModal('id','ת.ז.')">—</span></td>
+        <td><span class="tcell ph-val" id="role" onclick="openModal('role','תפקיד')">—</span></td>
+        <td><span class="tcell ph-val" id="fname" onclick="openModal('fname','שם פרטי')">—</span></td>
+        <td><span class="tcell ph-val" id="lname" onclick="openModal('lname','שם משפחה')">—</span></td>
+        <td><span class="tcell ph-val" id="badge" onclick="openModal('badge','מס\' תעודת מאבטח')">—</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- 1 תאריך -->
+  <div class="irow">
+    <span class="ilbl">1. תאריך:</span>
+    <span class="iff md ph-val" id="date" onclick="openModal('date','תאריך (DD/MM/YYYY)')">DD/MM/YYYY</span>
+    <span class="ilbl">שעה:</span>
+    <span class="iff sm ph-val" id="time" onclick="openModal('time','שעה')">__:__</span>
+    <span class="ilbl">תחנה / ק"מ:</span>
+    <span class="iff lg ph-val" id="station" onclick="openModal('station','תחנה / ק&quot;מ')">לחץ למילוי</span>
+  </div>
+
+  <!-- 2 מעוכב -->
+  <div class="irow">
+    <span class="ilbl">2. פרטי המעוכב:</span>
+    <span class="iff sm ph-val" id="susId" onclick="openModal('susId','ת.ז. מעוכב')">ת.ז.</span>
+    <span class="iff md ph-val" id="susName" onclick="openModal('susName','שם+משפחה')">שם מלא</span>
+    <span class="iff sm ph-val" id="susDob" onclick="openModal('susDob','תאריך לידה')">ת.לידה</span>
+    <span class="iff lg ph-val" id="susAddr" onclick="openModal('susAddr','כתובת')">כתובת</span>
+  </div>
+  <div class="sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ת.ז.)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(שם+משפחה)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(תאריך לידה)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(כתובת)</div>
+
+  <!-- 3 עבירה -->
+  <div class="irow">
+    <span class="ilbl">3. עוכב בחשד שעבר עבירה מסוג:</span>
+    <span class="iff lg ph-val" id="crime" onclick="openModal('crime','סוג העבירה')">לחץ למילוי</span>
+  </div>
+
+  <!-- 4 סיבה -->
+  <div style="margin-bottom:8px;">
+    <span class="ilbl">4. עיכבתי את החשוד כי:</span>
+    <span class="lf ph-val" id="reason1" onclick="openModal('reason1','עיכבתי כי (שורה 1)')">לחץ למילוי</span>
+    <span class="lf ph-val" id="reason2" onclick="openModal('reason2','המשך (שורה 2)')">לחץ למילוי — שורה 2</span>
+  </div>
+
+  <!-- 5 פעולות -->
+  <div class="sec">5. פעולות שננקטו:</div>
+  <div class="cblist">
+    <div class="cbrow" onclick="toggleCb('cb1')"><div class="cbbox" id="cb1-box"></div><span>הזדהיתי בפני המעוכב בציון פרטיי ע"י תעודת מאבטח / מנב"ט.</span></div>
+    <div class="cbrow" onclick="toggleCb('cb2')"><div class="cbbox" id="cb2-box"></div><span>הודעתי למעוכב שהוא מעוכב.</span></div>
+    <div class="cbrow" onclick="toggleCb('cb3')"><div class="cbbox" id="cb3-box"></div><span>הודעתי למעוכב על סיבת העיכוב.</span></div>
+    <div class="cbrow" onclick="toggleCb('cb4')"><div class="cbbox" id="cb4-box"></div><span>הודעתי למעוכב שעליו לחכות עימי עד לבוא אנשי משטרה.</span></div>
+    <div class="cbrow" onclick="toggleCb('cb5')"><div class="cbbox" id="cb5-box"></div><span>ביצעתי את הפעולות הבאות:</span></div>
+  </div>
+  <span class="lf ph-val" id="extra1" onclick="openModal('extra1','פעולות שבוצעו')">לחץ למילוי</span>
+  <span class="lf ph-val" id="extra2" onclick="openModal('extra2','המשך פעולות')">לחץ למילוי — שורה 2</span>
+
+  <!-- 6 תגובה -->
+  <div style="margin-bottom:8px;">
+    <span class="ilbl">6. תגובת המעוכב:</span>
+    <span class="lf ph-val" id="react1" onclick="openModal('react1','תגובת המעוכב (שורה 1)')">לחץ למילוי</span>
+    <span class="lf ph-val" id="react2" onclick="openModal('react2','תגובה (שורה 2)')">לחץ למילוי — שורה 2</span>
+    <span class="lf ph-val" id="react3" onclick="openModal('react3','תגובה (שורה 3)')">לחץ למילוי — שורה 3</span>
+  </div>
+
+  <!-- 7 עדים -->
+  <div style="margin-bottom:8px;">
+    <span class="ilbl">7. שמות אנשי הביטחון / מנב"ט שנכחו בעיכוב:</span>
+    <span class="lf ph-val" id="w1" onclick="openModal('w1','שמות עדים')">לחץ למילוי</span>
+    <span class="lf ph-val" id="w2" onclick="openModal('w2','עדים נוספים')">לחץ למילוי — שורה 2</span>
+  </div>
+
+  <!-- 8 פריטים -->
+  <div style="margin-bottom:8px;">
+    <span class="ilbl">8. מהמעוכב תפסתי את הפריטים הבאים (כולל סיבת התפיסה):</span>
+    <span class="lf ph-val" id="seized1" onclick="openModal('seized1','פריטים שנתפסו')">לחץ למילוי</span>
+    <span class="lf ph-val" id="seized2" onclick="openModal('seized2','המשך פריטים')">לחץ למילוי — שורה 2</span>
+  </div>
+
+  <!-- 9 שוטר -->
+  <div class="irow">
+    <span class="ilbl">9. את המעוכב, מסרתי לידי השוטר:</span>
+    <span class="iff md ph-val" id="copName" onclick="openModal('copName','שם השוטר')">שם</span>
+    <span class="iff sm ph-val" id="copRank" onclick="openModal('copRank','דרגה')">דרגה</span>
+    <span class="iff sm ph-val" id="copNum" onclick="openModal('copNum','מס\' אישי')">מס'</span>
+    <span class="iff md ph-val" id="copUnit" onclick="openModal('copUnit','יחידה')">יחידה</span>
+  </div>
+  <div class="sub" style="padding-right:130px;">(שם)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(דרגה)&nbsp;&nbsp;&nbsp;&nbsp;(מס' אישי)&nbsp;&nbsp;&nbsp;(יחידה)</div>
+  <div class="irow">
+    <span class="ilbl">בשעה:</span>
+    <span class="iff sm ph-val" id="handover" onclick="openModal('handover','שעת מסירה')">__:__</span>
+  </div>
+
+  <!-- חתימה -->
+  <div class="sig">
+    <span class="ilbl">חתימת ממלא הדו"ח:</span>
+    <span class="sig-line"></span>
+  </div>
+
+  <!-- 10 -->
+  <div class="docftr">
+    <span style="font-weight:bold;">10. יש לצרף דו"ח זה לדו"ח אירוע בטחוני ולשלוח למשרד הקב"ט הרלוונטי:</span><br>
+    צפון- 04-8564428, פקס רכבתי- 4428.<br>
+    דרום- 1538-9778774.
+  </div>
+
+</div><!-- /doc -->
+</div><!-- /page -->
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeBg(event)">
+  <div class="sheet">
+    <div class="sheet-lbl" id="modal-lbl">מלא שדה</div>
+    <input class="sheet-inp" id="modal-inp" type="text" autocomplete="off"
+      onkeydown="if(event.key==='Enter')confirmModal();if(event.key==='Escape')closeModal();">
+    <div class="sheet-btns">
+      <button class="sheet-cancel" onclick="closeModal()">ביטול</button>
+      <button class="sheet-ok" onclick="confirmModal()">אישור ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="succ" id="succ">
+  <div class="succ-icon">✅</div>
+  <div class="succ-title">הדוח נשלח!</div>
+  <div class="succ-sub">הדוח נשלח למייל<br><strong>danielgoychaev@gmail.com</strong><br>יש לצרף לדוח אירוע ביטחוני.</div>
+  <button class="succ-back" onclick="resetForm()">+ דוח חדש</button>
+</div>
+
+<script>
+var currentKey = null;
+var cbState = {cb1:false,cb2:false,cb3:false,cb4:false,cb5:false};
+var REQUIRED = ['id','role','fname','lname','badge','date','time','station','susId','susName','susDob','susAddr','crime','reason1','react1','copName','copRank','copNum','copUnit','handover'];
+
+// Set today
+var d = new Date();
+var td = String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+var el = document.getElementById('date');
+el.textContent = td;
+el.classList.remove('ph-val');
+
+function openModal(key, label) {
+  currentKey = key;
+  document.getElementById('modal-lbl').textContent = label;
+  var inp = document.getElementById('modal-inp');
+  var curr = document.getElementById(key).textContent;
+  var isPh = document.getElementById(key).classList.contains('ph-val');
+  inp.value = isPh ? '' : curr;
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(function(){ inp.focus(); inp.select(); }, 150);
+}
+
+function confirmModal() {
+  if (!currentKey) return;
+  var val = document.getElementById('modal-inp').value.trim();
+  var el = document.getElementById(currentKey);
+  if (val) {
+    el.textContent = val;
+    el.classList.remove('ph-val','inv','inv-t');
+  }
+  closeModal();
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  currentKey = null;
+}
+
+function closeBg(e) {
+  if (e.target.id === 'overlay') closeModal();
+}
+
+function toggleCb(id) {
+  cbState[id] = !cbState[id];
+  document.getElementById(id+'-box').textContent = cbState[id] ? '✓' : '';
+}
+
+function getVal(id) {
+  var el = document.getElementById(id);
+  return el.classList.contains('ph-val') ? '' : el.textContent;
+}
+
+function validate() {
+  var ok = true;
+  REQUIRED.forEach(function(k) {
+    var el = document.getElementById(k);
+    var v = el.classList.contains('ph-val') ? '' : el.textContent.trim();
+    if (!v) {
+      if (el.classList.contains('tcell') || el.classList.contains('iff')) {
+        el.classList.add('inv-t');
+      } else {
+        el.classList.add('inv');
+      }
+      ok = false;
+    }
+  });
+  return ok;
+}
+
+function sendEmail() {
+  if (!validate()) {
+    setTimeout(function(){
+      var e = document.querySelector('.inv, .inv-t');
+      if (e) e.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 100);
+    alert('יש למלא את כל השדות המסומנים באדום');
+    return;
+  }
+  var v = function(k){ return getVal(k) || '___'; };
+  var cb = function(k){ return cbState[k] ? '✓' : '☐'; };
+
+  var subj = 'דו"ח עיכוב — ' + v('fname') + ' ' + v('lname') + ' | ' + v('date');
+  var b = 'דו"ח עיכוב לאיש ביטחון — רכבת ישראל\n==========================================\n\n';
+  b += 'פרטי ממלא הדו"ח:\n';
+  b += 'ת.ז.: ' + v('id') + ' | תפקיד: ' + v('role') + ' | שם: ' + v('fname') + ' ' + v('lname') + ' | תעודת מאבטח: ' + v('badge') + '\n\n';
+  b += '1. תאריך: ' + v('date') + '  שעה: ' + v('time') + '  תחנה/ק"מ: ' + v('station') + '\n\n';
+  b += '2. פרטי המעוכב:\n';
+  b += '   ת.ז.: ' + v('susId') + ' | שם: ' + v('susName') + ' | ת.לידה: ' + v('susDob') + ' | כתובת: ' + v('susAddr') + '\n\n';
+  b += '3. עבירה: ' + v('crime') + '\n\n';
+  b += '4. עיכבתי כי:\n   ' + v('reason1') + '\n   ' + v('reason2') + '\n\n';
+  b += '5. פעולות שננקטו:\n';
+  b += '   ' + cb('cb1') + ' הזדהיתי בתעודת מאבטח / מנב"ט\n';
+  b += '   ' + cb('cb2') + ' הודעתי שהוא מעוכב\n';
+  b += '   ' + cb('cb3') + ' הודעתי על סיבת העיכוב\n';
+  b += '   ' + cb('cb4') + ' הודעתי שיחכה למשטרה\n';
+  b += '   ' + cb('cb5') + ' ביצעתי: ' + v('extra1') + '\n   ' + v('extra2') + '\n\n';
+  b += '6. תגובת המעוכב:\n   ' + v('react1') + '\n   ' + v('react2') + '\n   ' + v('react3') + '\n\n';
+  b += '7. עדים: ' + v('w1') + '\n   ' + v('w2') + '\n\n';
+  b += '8. פריטים: ' + v('seized1') + '\n   ' + v('seized2') + '\n\n';
+  b += '9. שוטר: ' + v('copName') + ' | דרגה: ' + v('copRank') + ' | מס\': ' + v('copNum') + ' | יחידה: ' + v('copUnit') + '\n';
+  b += '   בשעה: ' + v('handover') + '\n\n';
+  b += '--\nצפון: 04-8564428 | דרום: 1538-9778774';
+
+  window.location.href = 'mailto:danielgoychaev@gmail.com?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(b);
+  setTimeout(function(){ document.getElementById('succ').classList.add('open'); }, 800);
+}
+
+function printDoc() {
+  if (!validate()) {
+    setTimeout(function(){
+      var e = document.querySelector('.inv, .inv-t');
+      if (e) e.scrollIntoView({behavior:'smooth', block:'center'});
+    }, 100);
+    alert('יש למלא את כל השדות לפני הדפסה');
+    return;
+  }
+  window.print();
+}
+
+function resetForm() {
+  REQUIRED.forEach(function(k){ 
+    var el = document.getElementById(k); 
+    if (el) { el.classList.add('ph-val'); el.classList.remove('inv','inv-t'); }
+  });
+  ['reason2','extra1','extra2','react2','react3','w1','w2','seized1','seized2'].forEach(function(k){
+    var el = document.getElementById(k); if(el) el.classList.add('ph-val');
+  });
+  Object.keys(cbState).forEach(function(k){
+    cbState[k]=false;
+    document.getElementById(k+'-box').textContent='';
+  });
+  document.getElementById('succ').classList.remove('open');
+  // reset placeholders
+  var phs = {id:'—',role:'—',fname:'—',lname:'—',badge:'—',date:td,time:'__:__',station:'לחץ למילוי',susId:'ת.ז.',susName:'שם מלא',susDob:'ת.לידה',susAddr:'כתובת',crime:'לחץ למילוי',reason1:'לחץ למילוי',reason2:'לחץ למילוי — שורה 2',extra1:'לחץ למילוי',extra2:'לחץ למילוי — שורה 2',react1:'לחץ למילוי',react2:'לחץ למילוי — שורה 2',react3:'לחץ למילוי — שורה 3',w1:'לחץ למילוי',w2:'לחץ למילוי — שורה 2',seized1:'לחץ למילוי',seized2:'לחץ למילוי — שורה 2',copName:'שם',copRank:'דרגה',copNum:'מס\'',copUnit:'יחידה',handover:'__:__'};
+  Object.keys(phs).forEach(function(k){ var el=document.getElementById(k); if(el) el.textContent=phs[k]; });
+}
+</script>
+</body>
+</html>
