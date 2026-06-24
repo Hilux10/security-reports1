@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>דוח עיכוב לאיש ביטחון</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;direction:rtl;}
+body{font-family:'Times New Roman',David,serif;background:#d4d4d4;-webkit-font-smoothing:antialiased;}
+.bar{position:fixed;top:0;left:0;right:0;z-index:300;background:#1B2A4A;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px rgba(0,0,0,.35);}
+.bar-title{font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#fff;flex:1;}
+.bar-sub{font-size:10px;opacity:.7;color:#fff;}
+.bar-btn{border:none;padding:9px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;}
+.btn-print{background:#E2A200;color:#fff;margin-left:6px;}
+.btn-email{background:#16A34A;color:#fff;}
+.page{padding:70px 10px 60px;}
+.doc{background:#fff;max-width:780px;margin:0 auto;padding:12mm 14mm 10mm;box-shadow:0 4px 24px rgba(0,0,0,.18);font-size:10.5pt;line-height:1.65;}
+.logo-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:3px;}
+.logo-ir-name{font-size:13pt;font-weight:bold;color:#003399;line-height:1.2;}
+.logo-ir-en{font-size:7.5pt;color:#003399;}
+.logo-track{margin-top:3px;display:flex;flex-direction:column;gap:2px;}
+.logo-track span{display:block;background:#003399;border-radius:1px;}
+.dept-row{display:flex;justify-content:space-between;font-size:9pt;color:#003399;font-weight:bold;margin-bottom:1px;}
+.updated{font-size:8pt;color:#555;margin-bottom:5px;}
+.doc-hr{border:none;border-top:1.5px solid #000;margin:4px 0 8px;}
+.doc-title{text-align:center;font-size:15pt;font-weight:bold;text-decoration:underline;margin:4px 0 14px;}
+.sec{font-weight:bold;font-size:10.5pt;margin-bottom:5px;}
+.ftable{width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10pt;}
+.ftable th{border:1px solid #000;padding:4px 6px;background:#f0f0f0;text-align:center;font-weight:bold;font-size:9.5pt;}
+.ftable td{border:1px solid #000;padding:0;height:26px;}
+.tcell{width:100%;height:26px;border:none;outline:none;text-align:center;font-family:'Times New Roman',serif;font-size:10pt;background:transparent;cursor:pointer;direction:rtl;padding:2px 4px;display:block;line-height:22px;}
+.tcell:hover,.tcell:focus{background:#fffce8;}
+.irow{display:flex;align-items:flex-end;gap:4px;margin-bottom:7px;flex-wrap:wrap;}
+.ilbl{font-weight:bold;white-space:nowrap;font-size:10.5pt;}
+.ifield{border:none;border-bottom:1px solid #000;outline:none;background:transparent;font-family:'Times New Roman',serif;font-size:10.5pt;direction:rtl;padding:0 3px;cursor:pointer;min-height:20px;line-height:20px;display:inline-block;vertical-align:bottom;}
+.ifield:hover,.ifield:focus{background:#fffce8;}
+.ifield.sm{width:72px;}
+.ifield.md{width:130px;}
+.ifield.lg{flex:1;min-width:100px;}
+.sub{font-size:8.5pt;color:#555;margin-top:-4px;margin-bottom:8px;}
+.lfield{display:block;width:100%;border:none;border-bottom:1px solid #000;outline:none;background:transparent;font-family:'Times New Roman',serif;font-size:10.5pt;direction:rtl;padding:1px 3px;cursor:pointer;min-height:22px;line-height:22px;margin-bottom:5px;}
+.lfield:hover,.lfield:focus{background:#fffce8;}
+.cblist{margin:3px 0 6px;}
+.cbrow{display:flex;align-items:center;gap:8px;margin-bottom:3px;font-size:10.5pt;cursor:pointer;user-select:none;}
+.cbbox{width:13px;height:13px;border:1.5px solid #000;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:#fff;font-size:11px;font-weight:bold;}
+.sig{margin:12px 0 10px;font-size:10.5pt;}
+.sig-line{display:inline-block;border-bottom:1px solid #000;width:190px;height:20px;margin-right:6px;vertical-align:bottom;}
+.docftr{border-top:1px solid #ccc;padding-top:7px;font-size:10pt;margin-top:14px;}
+.ph{color:#aaa;}
+.inv{background:#FEF2F2!important;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:flex;align-items:flex-end;justify-content:center;}
+.sheet{background:#fff;width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px 20px 36px;font-family:Arial,sans-serif;direction:rtl;animation:su .2s ease;}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.sheet-lbl{font-size:15px;font-weight:700;color:#1B2A4A;margin-bottom:12px;}
+.sheet-inp{width:100%;border:1.5px solid #CBD5E1;border-radius:10px;padding:12px 14px;font-size:16px;font-family:Arial,serif;direction:rtl;outline:none;background:#F8FAFC;-webkit-appearance:none;}
+.sheet-inp:focus{border-color:#1B2A4A;background:#fff;}
+.sheet-btns{display:flex;gap:10px;margin-top:14px;}
+.sheet-ok{flex:1;background:#1B2A4A;color:#fff;border:none;padding:13px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;}
+.sheet-cancel{background:#F1F5F9;color:#334155;border:none;padding:13px 20px;border-radius:10px;font-size:14px;cursor:pointer;font-family:Arial,sans-serif;}
+.succ{position:fixed;inset:0;background:#fff;z-index:600;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Arial,sans-serif;text-align:center;padding:30px;}
+.succ-icon{font-size:64px;margin-bottom:20px;}
+.succ-title{font-size:22px;font-weight:700;color:#1B2A4A;margin-bottom:10px;}
+.succ-sub{font-size:15px;color:#475569;margin-bottom:28px;line-height:1.6;}
+.succ-back{background:#1B2A4A;color:#fff;border:none;padding:13px 30px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:Arial,sans-serif;}
+@media print{
+  .bar,.overlay,.succ{display:none!important;}
+  body{background:#fff;}
+  .page{padding:0;}
+  .doc{box-shadow:none;max-width:100%;padding:8mm 12mm;}
+  .ph{color:#000!important;}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const {useState,useRef} = React;
+const RECIPIENT='danielgoychaev@gmail.com';
+const REQUIRED=['id','role','fname','lname','badge','date','time','station','susId','susName','susDob','susAddr','crime','reason1','react1','copName','copRank','copNum','copUnit','handover'];
+const INIT={id:'',role:'',fname:'',lname:'',badge:'',date:'',time:'',station:'',susId:'',susName:'',susDob:'',susAddr:'',crime:'',reason1:'',reason2:'',cb1:false,cb2:false,cb3:false,cb4:false,cb5:false,extra1:'',extra2:'',react1:'',react2:'',react3:'',w1:'',w2:'',seized1:'',seized2:'',copName:'',copRank:'',copNum:'',copUnit:'',handover:''};
+
+function App(){
+  const today=()=>{const d=new Date();return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`;};
+  const [data,setData]=useState({...INIT,date:today()});
+  const [modal,setModal]=useState(null);
+  const [inv,setInv]=useState([]);
+  const [succ,setSucc]=useState(false);
+  const ref=useRef();
+  const set=(k,v)=>setData(p=>({...p,[k]:v}));
+  const open=(k,lbl)=>{setModal({k,lbl,v:data[k]||''});setTimeout(()=>ref.current&&ref.current.focus(),150);};
+  const confirm=()=>{if(!modal)return;set(modal.k,modal.v);setInv(p=>p.filter(x=>x!==modal.k));setModal(null);};
+  const validate=()=>{const m=REQUIRED.filter(k=>!data[k]||!String(data[k]).trim());setInv(m);return m.length===0;};
+
+  const F=({fk,lbl,cls='lg',ph=''})=>{
+    const v=data[fk];const bad=inv.includes(fk);
+    return <span className={`ifield ${cls} ${bad?'inv':''}`} onClick={()=>open(fk,lbl)}>{v||<span className="ph">{ph||lbl}</span>}</span>;
+  };
+  const L=({fk,lbl})=>{
+    const v=data[fk];const bad=inv.includes(fk);
+    return <span className={`lfield ${bad?'inv':''}`} onClick={()=>open(fk,lbl)}>{v||<span className="ph">{lbl}</span>}</span>;
+  };
+  const T=({fk,lbl})=>{
+    const v=data[fk];const bad=inv.includes(fk);
+    return <span className={`tcell ${bad?'inv':''}`} onClick={()=>open(fk,lbl)}>{v||<span className="ph">—</span>}</span>;
+  };
+  const Cb=({ck,txt})=>(
+    <div className="cbrow" onClick={()=>set(ck,!data[ck])}>
+      <div className="cbbox">{data[ck]?'✓':''}</div><span>{txt}</span>
+    </div>
+  );
+
+  const sendEmail=()=>{
+    if(!validate()){setTimeout(()=>{const e=document.querySelector('.inv');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});},100);alert('יש למלא את כל השדות המסומנים באדום');return;}
+    const v=k=>data[k]||'___';const cb=k=>data[k]?'✓':'☐';
+    const subj=`דו"ח עיכוב — ${v('fname')} ${v('lname')} | ${v('date')}`;
+    let b=`דו"ח עיכוב לאיש ביטחון — רכבת ישראל\n==========================================\n\n`;
+    b+=`פרטי ממלא:\nת.ז.: ${v('id')} | תפקיד: ${v('role')} | שם: ${v('fname')} ${v('lname')} | תעודה: ${v('badge')}\n\n`;
+    b+=`1. תאריך: ${v('date')}  שעה: ${v('time')}  תחנה: ${v('station')}\n\n`;
+    b+=`2. מעוכב:\n   ת.ז.: ${v('susId')} | שם: ${v('susName')} | ת.לידה: ${v('susDob')} | כתובת: ${v('susAddr')}\n\n`;
+    b+=`3. עבירה: ${v('crime')}\n\n4. עיכבתי כי:\n   ${v('reason1')}\n   ${v('reason2')}\n\n`;
+    b+=`5. פעולות:\n   ${cb('cb1')} הזדהיתי בתעודת מאבטח\n   ${cb('cb2')} הודעתי שהוא מעוכב\n   ${cb('cb3')} הודעתי על סיבת העיכוב\n   ${cb('cb4')} הודעתי שיחכה למשטרה\n   ${cb('cb5')} ביצעתי: ${v('extra1')}\n   ${v('extra2')}\n\n`;
+    b+=`6. תגובת המעוכב:\n   ${v('react1')}\n   ${v('react2')}\n   ${v('react3')}\n\n`;
+    b+=`7. עדים: ${v('w1')} | ${v('w2')}\n\n8. פריטים: ${v('seized1')} | ${v('seized2')}\n\n`;
+    b+=`9. שוטר: ${v('copName')} | דרגה: ${v('copRank')} | מס': ${v('copNum')} | יחידה: ${v('copUnit')}\n   שעה: ${v('handover')}\n\n`;
+    b+=`--\nצפון: 04-8564428 | דרום: 1538-9778774`;
+    window.location.href=`mailto:${RECIPIENT}?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent(b)}`;
+    setTimeout(()=>setSucc(true),800);
+  };
+
+  const printDoc=()=>{
+    if(!validate()){setTimeout(()=>{const e=document.querySelector('.inv');if(e)e.scrollIntoView({behavior:'smooth',block:'center'});},100);alert('יש למלא את כל השדות לפני הדפסה');return;}
+    window.print();
+  };
+
+  if(succ)return(
+    <div className="succ">
+      <div className="succ-icon">✅</div>
+      <div className="succ-title">הדוח נשלח!</div>
+      <div className="succ-sub">הדוח נשלח למייל<br/><strong>{RECIPIENT}</strong></div>
+      <button className="succ-back" onClick={()=>{setData({...INIT,date:today()});setSucc(false);setInv([]);}}>+ דוח חדש</button>
+    </div>
+  );
+
+  return(<>
+    <div className="bar">
+      <div style={{flex:1}}><div className="bar-title">דו"ח עיכוב לאיש ביטחון</div><div className="bar-sub">לחץ על כל שדה למילוי</div></div>
+      <button className="bar-btn btn-print" onClick={printDoc}>🖨️ הדפס</button>
+      <button className="bar-btn btn-email" onClick={sendEmail}>שלח מייל ✓</button>
+    </div>
+    <div className="page"><div className="doc">
+
+      <div className="logo-row">
+        <div>
+          <div className="logo-ir-name">רכבת ישראל</div>
+          <div className="logo-ir-en">Israel Railways</div>
+          <div className="logo-track">
+            <span style={{height:'3px',width:'90px'}}></span>
+            <span style={{height:'2px',width:'70px'}}></span>
+            <span style={{height:'1.5px',width:'55px'}}></span>
+          </div>
+        </div>
+        <svg viewBox="0 0 60 60" width="52" height="52" xmlns="http://www.w3.org/2000/svg">
+          <path d="M30,3 L54,13 L54,32 C54,44 30,56 30,56 C30,56 6,44 6,32 L6,13 Z" fill="none" stroke="#003399" strokeWidth="2"/>
+          <path d="M30,9 L48,17 L48,32 C48,41 30,51 30,51 C30,51 12,41 12,32 L12,17 Z" fill="#e8eef8"/>
+          <text x="30" y="37" textAnchor="middle" fontFamily="Arial" fontSize="18" fontWeight="bold" fill="#003399">ב</text>
+        </svg>
+      </div>
+
+      <div className="dept-row"><div>אגף בטחון</div><div>מחלקת אבטחה פיזית</div></div>
+      <div className="updated">עודכן בתאריך 21/3/2018</div>
+      <hr className="doc-hr"/>
+      <div className="doc-title">דו"ח עיכוב לאיש ביטחון</div>
+
+      <div className="sec">פרטי ממלא הדו"ח:</div>
+      <table className="ftable">
+        <thead><tr><th>ת.ז.</th><th>תפקיד</th><th>שם פרטי</th><th>שם משפחה</th><th>מס' תעודת מאבטח</th></tr></thead>
+        <tbody><tr>
+          <td><T fk="id" lbl="ת.ז."/></td>
+          <td><T fk="role" lbl="תפקיד"/></td>
+          <td><T fk="fname" lbl="שם פרטי"/></td>
+          <td><T fk="lname" lbl="שם משפחה"/></td>
+          <td><T fk="badge" lbl='מס&apos; תעודת מאבטח'/></td>
+        </tr></tbody>
+      </table>
+
+      <div className="irow">
+        <span className="ilbl">1. תאריך:</span><F fk="date" lbl="תאריך" cls="md" ph="DD/MM/YYYY"/>
+        <span className="ilbl">שעה:</span><F fk="time" lbl="שעה" cls="sm" ph="__:__"/>
+        <span className="ilbl">תחנה / ק"מ:</span><F fk="station" lbl='תחנה/ק"מ' cls="lg"/>
+      </div>
+
+      <div className="irow">
+        <span className="ilbl">2. פרטי המעוכב:</span>
+        <F fk="susId" lbl="ת.ז." cls="sm"/>
+        <F fk="susName" lbl="שם+משפחה" cls="md"/>
+        <F fk="susDob" lbl="ת.לידה" cls="sm" ph="DD/MM/YYYY"/>
+        <F fk="susAddr" lbl="כתובת" cls="lg"/>
+      </div>
+      <div className="sub">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(ת.ז.)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(שם+משפחה)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(תאריך לידה)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(כתובת)</div>
+
+      <div className="irow"><span className="ilbl">3. עוכב בחשד שעבר עבירה מסוג:</span><F fk="crime" lbl="סוג העבירה" cls="lg"/></div>
+
+      <div style={{marginBottom:8}}><span className="ilbl">4. עיכבתי את החשוד כי:</span><L fk="reason1" lbl="עיכבתי כי (שורה 1)"/><L fk="reason2" lbl="המשך (שורה 2)"/></div>
+
+      <div className="sec">5. פעולות שננקטו:</div>
+      <div className="cblist">
+        <Cb ck="cb1" txt='הזדהיתי בפני המעוכב בציון פרטיי ע"י תעודת מאבטח / מנב"ט.'/>
+        <Cb ck="cb2" txt="הודעתי למעוכב שהוא מעוכב."/>
+        <Cb ck="cb3" txt="הודעתי למעוכב על סיבת העיכוב."/>
+        <Cb ck="cb4" txt="הודעתי למעוכב שעליו לחכות עימי עד לבוא אנשי משטרה."/>
+        <Cb ck="cb5" txt="ביצעתי את הפעולות הבאות:"/>
+      </div>
+      <L fk="extra1" lbl="פעולות שבוצעו"/><L fk="extra2" lbl="המשך פעולות"/>
+
+      <div style={{marginBottom:8}}><span className="ilbl">6. תגובת המעוכב:</span><L fk="react1" lbl="תגובה (שורה 1)"/><L fk="react2" lbl="תגובה (שורה 2)"/><L fk="react3" lbl="תגובה (שורה 3)"/></div>
+
+      <div style={{marginBottom:8}}><span className="ilbl">7. שמות אנשי הביטחון / מנב"ט שנכחו בעיכוב:</span><L fk="w1" lbl="עדים (שורה 1)"/><L fk="w2" lbl="עדים (שורה 2)"/></div>
+
+      <div style={{marginBottom:8}}><span className="ilbl">8. מהמעוכב תפסתי את הפריטים הבאים (כולל סיבת התפיסה):</span><L fk="seized1" lbl="פריטים שנתפסו"/><L fk="seized2" lbl="המשך פריטים"/></div>
+
+      <div className="irow">
+        <span className="ilbl">9. את המעוכב, מסרתי לידי השוטר:</span>
+        <F fk="copName" lbl="שם שוטר" cls="md"/>
+        <F fk="copRank" lbl="דרגה" cls="sm"/>
+        <F fk="copNum" lbl="מס' אישי" cls="sm"/>
+        <F fk="copUnit" lbl="יחידה" cls="md"/>
+      </div>
+      <div className="sub" style={{paddingRight:140}}>(שם)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(דרגה)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(מס' אישי)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(יחידה)</div>
+      <div className="irow"><span className="ilbl">בשעה:</span><F fk="handover" lbl="שעת מסירה" cls="sm" ph="__:__"/></div>
+
+      <div className="sig"><span className="ilbl">חתימת ממלא הדו"ח:</span><span className="sig-line"></span></div>
+
+      <div className="docftr">
+        <span className="ilbl">10. יש לצרף דו"ח זה לדו"ח אירוע בטחוני ולשלוח למשרד הקב"ט הרלוונטי:</span><br/>
+        צפון- 04-8564428, פקס רכבתי- 4428.<br/>דרום- 1538-9778774.
+      </div>
+
+    </div></div>
+
+    {modal&&(
+      <div className="overlay" onClick={e=>{if(e.target.classList.contains('overlay'))setModal(null);}}>
+        <div className="sheet">
+          <div className="sheet-lbl">{modal.lbl}</div>
+          <input ref={ref} className="sheet-inp" type="text" value={modal.v}
+            onChange={e=>setModal(m=>({...m,v:e.target.value}))}
+            onKeyDown={e=>{if(e.key==='Enter')confirm();if(e.key==='Escape')setModal(null);}}
+            autoComplete="off"/>
+          <div className="sheet-btns">
+            <button className="sheet-cancel" onClick={()=>setModal(null)}>ביטול</button>
+            <button className="sheet-ok" onClick={confirm}>אישור ✓</button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>);
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
